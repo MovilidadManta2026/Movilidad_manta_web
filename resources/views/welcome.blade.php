@@ -26,6 +26,7 @@
             'resoluciones' => 'file',
             'convocatorias' => 'megaphone',
             'rtv' => 'tv',
+            'rtv_historial' => 'file',
             'terminal' => 'bus',
             'sgi' => 'chart',
             'intranet' => 'globe',

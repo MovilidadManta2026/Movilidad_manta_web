@@ -40,8 +40,10 @@ class PublicSiteController extends Controller
             ]);
         }
 
-        $cms = CmsItem::published()->get()->keyBy('key');
         $this->ensurePaymentServices();
+        $this->ensureRequiredShortcuts();
+
+        $cms = CmsItem::published()->get()->keyBy('key');
         $newsCategory = $request->string('category', 'todas')->toString();
         $serviceSearch = $request->string('q')->toString();
         $accountYears = CmsItem::published()->whereIn('module', ['transparencia', 'pdfs'])->pluck('metadata')
@@ -145,5 +147,41 @@ class PublicSiteController extends Controller
                 ]
             );
         }
+    }
+
+    private function ensureRequiredShortcuts(): void
+    {
+        $shortcuts = [
+            [
+                'key' => 'shortcut.rtv.history',
+                'title' => 'Historial y reporte de RTV',
+                'content' => 'Consulta el historial y reporte de revisión técnica vehicular.',
+                'sort_order' => 17,
+                'metadata' => [
+                    'placement' => 'shortcut',
+                    'category' => 'rtv_historial',
+                    'icon' => 'file',
+                    'url' => 'https://consultartv.movilidadmanta.gob.ec/web/webpanel.consulta.aspx',
+                ],
+            ],
+        ];
+
+        foreach ($shortcuts as $shortcut) {
+            CmsItem::updateOrCreate(
+                ['key' => $shortcut['key']],
+                [
+                    'module' => 'inicio',
+                    'title' => $shortcut['title'],
+                    'content' => $shortcut['content'],
+                    'metadata' => $shortcut['metadata'],
+                    'status' => 'published',
+                    'sort_order' => $shortcut['sort_order'],
+                    'published_at' => now(),
+                ]
+            );
+        }
+
+        CmsItem::where('key', 'shortcut.sgi')->update(['sort_order' => 18]);
+        CmsItem::where('key', 'shortcut.intranet')->update(['sort_order' => 19]);
     }
 }
