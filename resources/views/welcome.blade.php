@@ -441,8 +441,21 @@
                             <button type="button"><span>{{ $phase }}</span><i>{{ $loop->first ? '⌃' : '⌄' }}</i></button>
                             <div class="accordion-body">
                                 @foreach ($documents as $doc)
-                                    <a href="{{ $doc->metadataValue('asset') ? $doc->assetUrl() : route('public.content.show', $doc) }}" @if($doc->metadataValue('asset')) target="_blank" rel="noopener" @endif>
-                                        <x-icon name="doc" /><span>{{ $loop->iteration }}. {{ $doc->title }}</span><b>{{ strtoupper($doc->metadataValue('type', $doc->module === 'pdfs' ? 'PDF' : 'WEB')) }}</b><em>↓</em>
+                                    @php
+                                        $docUrl = $doc->metadataValue('asset')
+                                            ? $doc->assetUrl()
+                                            : $doc->metadataValue('url');
+                                        $opensNew = $docUrl && ($doc->metadataValue('asset') || str_starts_with($docUrl, 'http'));
+                                    @endphp
+                                    <a href="{{ $docUrl ?: '#' }}" @if($opensNew) target="_blank" rel="noopener" @endif>
+                                        <x-icon name="doc" />
+                                        <span>
+                                            {{ $loop->iteration }}. {{ $doc->title }}
+                                            @if ($doc->metadataValue('subtitle'))
+                                                <small>{{ $doc->metadataValue('subtitle') }}</small>
+                                            @endif
+                                        </span>
+                                        <b>{{ strtoupper($doc->metadataValue('type', $doc->module === 'pdfs' ? 'PDF' : 'WEB')) }}</b><em>↓</em>
                                     </a>
                                 @endforeach
                             </div>
@@ -483,8 +496,25 @@
                             <button type="button"><span>{{ $phase }}</span><i>{{ $loop->first ? '⌃' : '⌄' }}</i></button>
                             <div class="accordion-body">
                                 @foreach ($documents as $doc)
-                                    <a href="{{ $doc->metadataValue('asset') ? $doc->assetUrl() : route('public.content.show', $doc) }}" @if($doc->metadataValue('asset')) target="_blank" rel="noopener" @endif>
-                                        <x-icon name="doc" /><span>{{ $loop->iteration }}. {{ $doc->title }}</span><b>{{ strtoupper($doc->metadataValue('type', 'PDF')) }}</b><em>↓</em>
+                                    @php
+                                        $rawDocUrl = $doc->metadataValue('url');
+                                        $normalizedDocUrl = $rawDocUrl && ! str_starts_with($rawDocUrl, 'http') && ! str_starts_with($rawDocUrl, '/')
+                                            ? 'https://'.$rawDocUrl
+                                            : $rawDocUrl;
+                                        $docUrl = $doc->metadataValue('asset')
+                                            ? $doc->assetUrl()
+                                            : $normalizedDocUrl;
+                                        $opensNew = $docUrl && ($doc->metadataValue('asset') || str_starts_with($docUrl, 'http'));
+                                    @endphp
+                                    <a href="{{ $docUrl ?: '#' }}" @if($opensNew) target="_blank" rel="noopener" @endif>
+                                        <x-icon name="doc" />
+                                        <span>
+                                            {{ $loop->iteration }}. {{ $doc->title }}
+                                            @if ($doc->metadataValue('subtitle'))
+                                                <small>{{ $doc->metadataValue('subtitle') }}</small>
+                                            @endif
+                                        </span>
+                                        <b>{{ strtoupper($doc->metadataValue('type', 'PDF')) }}</b><em>↓</em>
                                     </a>
                                 @endforeach
                             </div>

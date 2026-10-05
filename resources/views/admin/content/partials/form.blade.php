@@ -61,7 +61,7 @@
 <section class="grid gap-4 rounded-lg border border-[#cfeafa] bg-white p-4">
     <div>
         <h3 class="text-sm font-black uppercase text-[#064782]">2. Archivo o enlace</h3>
-        <p class="mt-1 text-xs text-slate-500">Sube una imagen, PDF o video. El sistema lo vincula automáticamente.</p>
+        <p class="mt-1 text-xs text-slate-500">Sube una imagen, PDF o video, o pega un enlace externo si no tienes el documento cargado.</p>
     </div>
 
     @if ($assetUrl)
@@ -84,6 +84,7 @@
         <label class="grid gap-2 text-sm font-bold text-slate-700">
             Enlace externo o página destino
             <input class="{{ $inputClass }}" name="metadata[url]" value="{{ $metadata['url'] ?? '' }}" placeholder="Ej: https://... o /contacto">
+            <span class="text-xs font-medium text-slate-500">En LOTAIP puedes publicar solo enlace con título, subtítulo, año y fase.</span>
         </label>
         <label class="grid gap-2 text-sm font-bold text-slate-700">
             Texto alternativo del archivo

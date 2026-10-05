@@ -233,12 +233,24 @@ class CmsItemController extends Controller
     private function normalizeMetadata(array $data, array $metadata): array
     {
         $asset = $metadata['asset'] ?? null;
+        $url = $metadata['url'] ?? null;
         $isPdf = is_string($asset) && str_ends_with(strtolower($asset), '.pdf');
+
+        if (is_string($url) && $url !== '' && ! str_starts_with($url, 'http') && ! str_starts_with($url, '/')) {
+            $metadata['url'] = 'https://'.$url;
+            $url = $metadata['url'];
+        }
 
         if ($isPdf && in_array($data['module'], ['pdfs', 'transparencia', 'lotaip'], true)) {
             $metadata['year'] = $metadata['year'] ?? (string) now()->year;
             $metadata['phase'] = $metadata['phase'] ?? 'Documentos publicados';
             $metadata['type'] = 'PDF';
+        }
+
+        if (! $asset && $url && in_array($data['module'], ['transparencia', 'lotaip'], true)) {
+            $metadata['year'] = $metadata['year'] ?? (string) now()->year;
+            $metadata['phase'] = $metadata['phase'] ?? 'Enlaces publicados';
+            $metadata['type'] = $metadata['type'] ?? 'LINK';
         }
 
         return $metadata;

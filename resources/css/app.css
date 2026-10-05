@@ -1304,6 +1304,16 @@ img { display: block; max-width: 100%; }
     padding: 0 24px;
     border-bottom: 1px solid var(--line);
 }
+.accordion-body a span {
+    display: grid;
+    gap: 3px;
+}
+.accordion-body a small {
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
 .accordion-body b {
     justify-self: center;
     padding: 5px 10px;
