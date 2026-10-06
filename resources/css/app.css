@@ -857,6 +857,16 @@ img { display: block; max-width: 100%; }
     width: 150px;
     height: auto;
 }
+.announcement-image {
+    display: block;
+    width: 100%;
+    max-height: 340px;
+    margin-top: 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    object-fit: contain;
+    background: var(--soft);
+}
 .announcement-stamp span,
 .announcement-kicker {
     color: var(--blue);
@@ -1509,6 +1519,137 @@ img { display: block; max-width: 100%; }
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 
+.convocatoria-hero {
+    min-height: 300px;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 18px;
+    padding: 54px 20px;
+    text-align: center;
+    color: white;
+    background:
+        linear-gradient(90deg, rgba(6, 71, 130, .86), rgba(20, 155, 215, .78)),
+        url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1800&q=85') center/cover;
+}
+.convocatoria-hero img {
+    width: min(230px, 52vw);
+    max-height: 86px;
+    object-fit: contain;
+}
+.convocatoria-hero h1 {
+    margin: 0;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: .95;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+.convocatoria-hero p {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.4vw, 2.1rem);
+    font-weight: 900;
+}
+.convocatoria-page {
+    width: min(100%, 1580px);
+    margin: 0 auto;
+    padding: clamp(40px, 6vw, 84px) 22px;
+}
+.convocatoria-intro,
+.convocatoria-detail-head {
+    max-width: 1320px;
+    margin: 0 auto clamp(46px, 6vw, 76px);
+    text-align: center;
+}
+.convocatoria-intro h2,
+.convocatoria-detail-head h1,
+.convocatoria-list-section h2 {
+    margin: 0 0 28px;
+    color: #1e2b34;
+    font-size: clamp(2.2rem, 4.6vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+.convocatoria-intro p,
+.convocatoria-detail-head p,
+.convocatoria-detail-head div {
+    margin: 0 auto;
+    max-width: 1320px;
+    color: #5d6d78;
+    font-size: clamp(1.2rem, 2vw, 2rem);
+    line-height: 1.55;
+    font-weight: 600;
+}
+.convocatoria-list-section h2 {
+    text-align: center;
+    letter-spacing: 0;
+    text-transform: none;
+}
+.convocatoria-table {
+    overflow: hidden;
+    border: 1px solid #d9e3ea;
+    background: white;
+}
+.convocatoria-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    min-height: 150px;
+    border-bottom: 1px solid #d9e3ea;
+}
+.convocatoria-row:last-child { border-bottom: 0; }
+.convocatoria-row > div {
+    display: grid;
+    align-content: center;
+    gap: 12px;
+    padding: clamp(24px, 4vw, 42px);
+}
+.convocatoria-row h3 {
+    margin: 0;
+    color: #1e2b34;
+    font-size: clamp(1.3rem, 2.4vw, 2rem);
+    line-height: 1.2;
+    font-weight: 900;
+}
+.convocatoria-row p {
+    margin: 0;
+    color: #657581;
+    font-size: clamp(1rem, 1.8vw, 1.45rem);
+    line-height: 1.35;
+}
+.convocatoria-row > a {
+    display: grid;
+    place-self: center;
+    place-items: center;
+    width: min(250px, calc(100% - 42px));
+    min-height: 92px;
+    padding: 18px;
+    color: white;
+    text-align: center;
+    background: #0b4f87;
+    border-radius: 8px;
+    box-shadow: 0 22px 42px rgba(11, 79, 135, .15);
+    font-size: clamp(1rem, 1.8vw, 1.45rem);
+    line-height: 1.15;
+    font-weight: 900;
+}
+.convocatoria-row > a:hover {
+    background: #149BD7;
+}
+.convocatoria-empty {
+    padding: 32px;
+    color: #657581;
+    text-align: center;
+    font-size: 1.1rem;
+}
+.convocatoria-back {
+    display: inline-flex;
+    margin-top: 28px;
+    color: #0b4f87;
+    font-weight: 900;
+}
+
 @media (max-width: 1180px) {
     .site-header { grid-template-columns: auto auto; justify-content: space-between; }
     .main-nav {
@@ -1553,6 +1694,9 @@ img { display: block; max-width: 100%; }
     .quick-panel, .quick-panel.compact, .account-links, .shortcut-grid, .service-grid, .post-grid, .footer-grid {
         grid-template-columns: repeat(2, 1fr) !important;
     }
+    .convocatoria-row {
+        grid-template-columns: minmax(0, 1fr) 240px;
+    }
     .floating-help {
         position: relative;
         right: auto;
@@ -1574,6 +1718,14 @@ img { display: block; max-width: 100%; }
     .video-cta, .social-rail, .hero-steps { display: none; }
     .quick-panel, .quick-panel.compact, .account-links, .shortcut-grid, .news-strip, .service-grid, .post-grid, .gallery, .stats-band, .footer-grid {
         grid-template-columns: 1fr !important;
+    }
+    .convocatoria-row {
+        grid-template-columns: 1fr;
+    }
+    .convocatoria-row > a {
+        width: calc(100% - 44px);
+        min-height: 68px;
+        margin: 0 22px 24px;
     }
     .mission-layout { grid-template-columns: 1fr; }
     .bulletin-carousel {
@@ -1600,6 +1752,7 @@ img { display: block; max-width: 100%; }
         padding-right: 46px;
     }
     .announcement-stamp img { width: 118px; }
+    .announcement-image { max-height: 240px; }
     .quick-panel a, .stats-band a { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.18); }
     .stats-band a { padding: 20px 26px; }
     .help-band {

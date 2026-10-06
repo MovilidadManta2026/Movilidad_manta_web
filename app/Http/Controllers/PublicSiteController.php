@@ -7,6 +7,7 @@ use App\Models\MediaAsset;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
@@ -92,7 +93,7 @@ class PublicSiteController extends Controller
                 ->map(fn ($metadata) => $metadata['category'] ?? null)->filter()->unique()->values(),
             'quickLinks' => CmsItem::published()->where('module', 'inicio')->where('metadata->placement', 'shortcut')->orderBy('sort_order')->get(),
             'bulletins' => CmsItem::published()->where('module', 'boletines')->orderBy('sort_order')->latest('published_at')->take(12)->get(),
-            'activeCall' => CmsItem::published()->where('module', 'convocatorias')->latest('published_at')->first(),
+            'activeCall' => $this->activePopupCall(),
             'latestDocuments' => CmsItem::published()
                 ->whereIn('module', ['transparencia', 'pdfs'])
                 ->latest('published_at')
@@ -110,6 +111,46 @@ class PublicSiteController extends Controller
                 ? MediaAsset::whereIn('module', ['fotos', 'inicio'])->where('type', 'image')->latest()->take(6)->get()
                 : collect(),
         ]);
+    }
+
+    private function activePopupCall(): ?CmsItem
+    {
+        $now = now();
+
+        return CmsItem::published()
+            ->where('module', 'popup_convocatorias')
+            ->latest('published_at')
+            ->get()
+            ->first(fn (CmsItem $item) => $this->popupIsInsideWindow($item, $now));
+    }
+
+    private function popupIsInsideWindow(CmsItem $item, Carbon $now): bool
+    {
+        $startsAt = $this->parsePopupDate($item->metadataValue('starts_at'));
+        $endsAt = $this->parsePopupDate($item->metadataValue('ends_at'));
+
+        if ($startsAt && $startsAt->isAfter($now)) {
+            return false;
+        }
+
+        if ($endsAt && $endsAt->isBefore($now)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function parsePopupDate(?string $value): ?Carbon
+    {
+        if (! filled($value)) {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($value);
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     private function ensurePaymentServices(): void

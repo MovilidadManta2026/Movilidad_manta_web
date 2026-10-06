@@ -578,16 +578,22 @@
                     <img src="/assets/brand/logo.png" alt="Manta Intervención">
                     <span>Convocatoria oficial</span>
                 </div>
+                @if ($activeCall->assetUrl())
+                    <img class="announcement-image" src="{{ $activeCall->assetUrl() }}" alt="{{ $activeCall->metadataValue('alt', $activeCall->title) }}">
+                @endif
                 <span class="announcement-kicker">{{ $activeCall->metadataValue('subtitle', 'Información ciudadana') }}</span>
                 <h2>{{ $activeCall->title }}</h2>
-                @if ($activeCall->metadataValue('start_date') || $activeCall->metadataValue('end_date') || $activeCall->metadataValue('date'))
+                @if ($activeCall->metadataValue('starts_at') || $activeCall->metadataValue('ends_at') || $activeCall->metadataValue('start_date') || $activeCall->metadataValue('end_date') || $activeCall->metadataValue('date'))
                     <div class="announcement-dates">
                         @if ($activeCall->metadataValue('date'))<span>{{ $activeCall->metadataValue('date') }}</span>@endif
+                        @if ($activeCall->metadataValue('starts_at'))<span>Desde: {{ str_replace('T', ' ', $activeCall->metadataValue('starts_at')) }}</span>@endif
+                        @if ($activeCall->metadataValue('ends_at'))<span>Hasta: {{ str_replace('T', ' ', $activeCall->metadataValue('ends_at')) }}</span>@endif
                         @if ($activeCall->metadataValue('start_date'))<span>Inicio: {{ $activeCall->metadataValue('start_date') }}</span>@endif
                         @if ($activeCall->metadataValue('end_date'))<span>Cierre: {{ $activeCall->metadataValue('end_date') }}</span>@endif
                     </div>
                 @endif
                 <div class="announcement-copy">{!! nl2br(e($activeCall->content)) !!}</div>
+                <a class="primary-btn" href="{{ route('convocatorias') }}">Ver convocatoria <span>→</span></a>
                 @if ($activeCall->metadataValue('url'))
                     <a class="primary-btn" href="{{ $activeCall->metadataValue('url') }}" target="_blank" rel="noopener">Ver más <span>→</span></a>
                 @endif

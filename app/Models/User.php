@@ -62,8 +62,8 @@ class User extends Authenticatable
         }
 
         return match ($this->role) {
-            'planificacion' => in_array($module, ['mision_vision', 'convocatorias', 'transparencia', 'lotaip', 'pdfs', 'servicios', 'textos'], true),
-            'comunicacion' => in_array($module, ['inicio', 'mision_vision', 'boletines', 'convocatorias', 'noticias', 'fotos', 'foros', 'textos'], true),
+            'planificacion' => in_array($module, ['mision_vision', 'convocatorias', 'popup_convocatorias', 'transparencia', 'lotaip', 'pdfs', 'servicios', 'textos'], true),
+            'comunicacion' => in_array($module, ['inicio', 'mision_vision', 'boletines', 'convocatorias', 'popup_convocatorias', 'noticias', 'fotos', 'foros', 'textos'], true),
             default => false,
         };
     }

@@ -18,6 +18,7 @@ class CmsItemController extends Controller
         'mision_vision' => 'Misión y Visión',
         'boletines' => 'Boletines',
         'convocatorias' => 'Convocatorias',
+        'popup_convocatorias' => 'Pop up convocatorias',
         'textos' => 'Textos generales',
         'noticias' => 'Noticias',
         'servicios' => 'Servicios',
@@ -88,10 +89,12 @@ class CmsItemController extends Controller
     {
         $data = $this->validated($request);
         unset($data['asset_file']);
+        unset($data['convocatoria_documents']);
         $this->authorizeModule($data['module']);
 
         $metadata = $this->metadataFromRequest($request);
         $metadata = $this->attachUploadedAsset($request, $data, $metadata);
+        $metadata = $this->attachConvocatoriaDocuments($request, $data, $metadata);
         $metadata = $this->normalizeMetadata($data, $metadata);
         $key = $data['key'] ?: $this->uniqueKey($data['module'], $data['title']);
 
@@ -121,12 +124,13 @@ class CmsItemController extends Controller
     {
         $data = $this->validated($request, $cmsItem);
         unset($data['asset_file']);
+        unset($data['convocatoria_documents']);
         $this->authorizeModule($cmsItem->module);
         $this->authorizeModule($data['module']);
 
         $cmsItem->update([
             ...$data,
-            'metadata' => $this->normalizeMetadata($data, $this->attachUploadedAsset($request, $data, $this->metadataFromRequest($request))),
+            'metadata' => $this->normalizeMetadata($data, $this->attachConvocatoriaDocuments($request, $data, $this->attachUploadedAsset($request, $data, $this->metadataFromRequest($request)))),
             'published_at' => $data['status'] === 'published' ? ($cmsItem->published_at ?? now()) : null,
             'updated_by' => $request->user()->id,
         ]);
@@ -146,6 +150,10 @@ class CmsItemController extends Controller
 
     private function validated(Request $request, ?CmsItem $item = null): array
     {
+        $assetFileMimes = $request->input('module') === 'popup_convocatorias'
+            ? 'mimes:jpg,jpeg,png,webp'
+            : 'mimes:jpg,jpeg,png,webp,pdf,mp4';
+
         return $request->validate([
             'module' => ['required', Rule::in(array_keys(self::MODULES))],
             'key' => [
@@ -158,7 +166,9 @@ class CmsItemController extends Controller
             'content' => ['nullable', 'string'],
             'status' => ['required', 'in:draft,published,archived'],
             'sort_order' => ['required', 'integer', 'min:0'],
-            'asset_file' => ['nullable', 'file', 'max:51200', 'mimes:jpg,jpeg,png,webp,pdf,mp4'],
+            'asset_file' => ['nullable', 'file', 'max:51200', $assetFileMimes],
+            'convocatoria_documents' => ['nullable', 'array'],
+            'convocatoria_documents.*' => ['nullable', 'file', 'max:51200', 'mimes:pdf'],
         ]);
     }
 
@@ -230,6 +240,47 @@ class CmsItemController extends Controller
         ];
     }
 
+    private function attachConvocatoriaDocuments(Request $request, array $data, array $metadata): array
+    {
+        if ($data['module'] !== 'convocatorias') {
+            return $metadata;
+        }
+
+        $documents = $metadata['documents'] ?? [];
+        $documents = is_array($documents) ? $documents : [];
+
+        foreach (range(0, 3) as $index) {
+            $document = $documents[$index] ?? [];
+
+            if ($request->hasFile("convocatoria_documents.$index")) {
+                $file = $request->file("convocatoria_documents.$index");
+                $path = $file->store('cms/convocatorias/documentos', 'public');
+
+                MediaAsset::create([
+                    'module' => 'convocatorias',
+                    'type' => 'pdf',
+                    'title' => $document['title'] ?? $data['title'].' documento '.($index + 1),
+                    'alt' => $document['title'] ?? $data['title'],
+                    'path' => $path,
+                    'original_name' => $file->getClientOriginalName(),
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                    'uploaded_by' => $request->user()->id,
+                ]);
+
+                $document['path'] = $path;
+            }
+
+            $document['title'] = $document['title'] ?? '';
+            $document['subtitle'] = $document['subtitle'] ?? '';
+            $documents[$index] = $document;
+        }
+
+        $metadata['documents'] = array_values($documents);
+
+        return $metadata;
+    }
+
     private function normalizeMetadata(array $data, array $metadata): array
     {
         $asset = $metadata['asset'] ?? null;
@@ -258,17 +309,33 @@ class CmsItemController extends Controller
 
     private function keepOnlyOnePublishedCall(CmsItem $item): void
     {
-        if ($item->module !== 'convocatorias' || $item->status !== 'published') {
+        if ($item->status !== 'published') {
             return;
         }
 
-        CmsItem::where('module', 'convocatorias')
-            ->where('id', '!=', $item->id)
-            ->where('status', 'published')
-            ->update([
-                'status' => 'draft',
-                'published_at' => null,
-                'updated_by' => request()->user()->id,
-            ]);
+        if ($item->module === 'popup_convocatorias') {
+            CmsItem::where('module', 'popup_convocatorias')
+                ->where('id', '!=', $item->id)
+                ->where('status', 'published')
+                ->update([
+                    'status' => 'draft',
+                    'published_at' => null,
+                    'updated_by' => request()->user()->id,
+                ]);
+
+            return;
+        }
+
+        if ($item->module === 'convocatorias' && $item->metadataValue('placement') === 'popup') {
+            CmsItem::where('module', 'convocatorias')
+                ->where('id', '!=', $item->id)
+                ->where('metadata->placement', 'popup')
+                ->where('status', 'published')
+                ->update([
+                    'status' => 'draft',
+                    'published_at' => null,
+                    'updated_by' => request()->user()->id,
+                ]);
+        }
     }
 }

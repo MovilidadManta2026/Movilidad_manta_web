@@ -16,6 +16,8 @@ Route::get('/la-ciudad', PublicSiteController::class)->name('city');
 Route::get('/mision-vision', PublicSiteController::class)->name('mission-vision');
 Route::get('/servicios', PublicSiteController::class)->name('services');
 Route::get('/noticias', PublicSiteController::class)->name('news');
+Route::get('/convocatorias', [PublicContentController::class, 'convocatorias'])->name('convocatorias');
+Route::get('/convocatorias/{cmsItem}', [PublicContentController::class, 'convocatoria'])->name('convocatorias.show');
 Route::get('/transparencia', fn () => Redirect::route('accountability'))->name('transparency');
 Route::get('/transparencia/rendicion-de-cuentas', PublicSiteController::class)->name('accountability');
 Route::get('/transparencia/lotaip', PublicSiteController::class)->name('lotaip');
