@@ -15,6 +15,7 @@ Route::get('/', PublicSiteController::class)->name('home');
 Route::get('/la-ciudad', PublicSiteController::class)->name('city');
 Route::get('/mision-vision', PublicSiteController::class)->name('mission-vision');
 Route::get('/servicios', PublicSiteController::class)->name('services');
+Route::get('/estructura-organica', [PublicContentController::class, 'estructuraOrganica'])->name('organic-structure');
 Route::get('/noticias', PublicSiteController::class)->name('news');
 Route::get('/convocatorias', [PublicContentController::class, 'convocatorias'])->name('convocatorias');
 Route::get('/convocatorias/{cmsItem}', [PublicContentController::class, 'convocatoria'])->name('convocatorias.show');

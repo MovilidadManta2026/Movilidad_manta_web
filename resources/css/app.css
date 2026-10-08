@@ -1649,6 +1649,25 @@ img { display: block; max-width: 100%; }
     color: #0b4f87;
     font-weight: 900;
 }
+.structure-section {
+    width: min(100%, 1580px);
+    margin: 0 auto;
+    padding: clamp(36px, 6vw, 76px) 22px;
+}
+.structure-viewer {
+    overflow: auto;
+    margin: 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+.structure-viewer img {
+    display: block;
+    width: 100%;
+    min-width: 960px;
+    height: auto;
+}
 
 @media (max-width: 1180px) {
     .site-header { grid-template-columns: auto auto; justify-content: space-between; }

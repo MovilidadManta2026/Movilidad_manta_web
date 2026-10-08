@@ -30,6 +30,13 @@ class PublicContentController extends Controller
         ]);
     }
 
+    public function estructuraOrganica(): View
+    {
+        return view('public.estructura-organica', [
+            'quickLinks' => $this->quickLinks(),
+        ]);
+    }
+
     public function show(CmsItem $cmsItem): View
     {
         abort_unless($cmsItem->status === 'published', 404);

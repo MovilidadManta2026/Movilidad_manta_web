@@ -18,6 +18,7 @@
             <button type="button" class="nav-dropdown-trigger active">Servicios</button>
             <div class="nav-dropdown-menu nav-dropdown-menu-wide">
                 <a href="/servicios" data-route>Todos los servicios</a>
+                <a href="/estructura-organica" data-route>Estructura Orgánica</a>
                 @foreach ($quickLinks as $link)
                     @php $linkUrl = $link->actionUrl(); @endphp
                     <a href="{{ $linkUrl }}" {!! $externalAttrs($linkUrl) !!} data-route>{{ $link->title }}</a>
@@ -64,6 +65,7 @@
         <div class="mt-2 rounded-lg border border-[#cfeafa] p-2">
             <span class="block px-2 py-2 text-xs text-[#149BD7]">Servicios</span>
             <a class="block rounded-lg px-4 py-3 hover:bg-[#eef9fd] hover:text-[#064782]" href="/servicios" data-route>Todos los servicios</a>
+            <a class="block rounded-lg px-4 py-3 hover:bg-[#eef9fd] hover:text-[#064782]" href="/estructura-organica" data-route>Estructura Orgánica</a>
             @foreach ($quickLinks as $link)
                 @php $linkUrl = $link->actionUrl(); @endphp
                 <a class="block rounded-lg px-4 py-3 hover:bg-[#eef9fd] hover:text-[#064782]" href="{{ $linkUrl }}" {!! $externalAttrs($linkUrl) !!} data-route>{{ $link->title }}</a>
