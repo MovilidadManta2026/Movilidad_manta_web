@@ -4,23 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $item->title }} | Manta Intervención</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800,900" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#eef9fd] text-slate-900 antialiased">
-    <header class="site-header border-b border-[#cfeafa] bg-white/95 shadow-sm backdrop-blur-xl">
-        <a class="brand" href="{{ route('home') }}">
-            <img src="/assets/brand/logo.png" alt="Manta Intervención">
-        </a>
-        <nav class="main-nav" aria-label="Navegacion principal">
-            <a href="{{ route('home') }}">Inicio</a>
-            <a href="{{ route('mission-vision') }}">Misión y Visión</a>
-            <a href="{{ route('news') }}">Noticias</a>
-            <a href="{{ route('services') }}">Servicios</a>
-            <a href="{{ route('lotaip') }}">LOTAIP</a>
-            <a href="{{ route('accountability') }}">Rendición de Cuentas</a>
-            <a href="{{ route('contact') }}">Contacto</a>
-        </nav>
-    </header>
+    @include('public.partials.site-header', ['quickLinks' => $quickLinks])
 
     <main class="mx-auto max-w-5xl px-4 py-10 md:py-16">
         <article class="manta-card overflow-hidden">

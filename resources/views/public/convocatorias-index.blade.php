@@ -4,16 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Convocatorias | Manta Movilidad</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800,900" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-white text-slate-900 antialiased">
+<body class="bg-[#eef9fd] text-slate-900 antialiased">
     @include('public.partials.site-header', ['quickLinks' => $quickLinks])
 
-    <section class="convocatoria-hero">
-        <img src="/assets/brand/logo.png" alt="Manta Intervención">
-        <h1>Convocatorias</h1>
-        <p>Procesos públicos disponibles de Movilidad de Manta EP</p>
-    </section>
+    <x-inner-hero
+        title="Convocatorias"
+        crumb="Inicio / Servicios / Convocatorias"
+        text="Procesos públicos disponibles de Movilidad de Manta EP."
+        image="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1800&q=85"
+    />
 
     <main class="convocatoria-page">
         <section class="convocatoria-intro">

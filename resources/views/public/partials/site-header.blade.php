@@ -1,5 +1,13 @@
 @php
     $externalAttrs = fn (?string $url) => str_starts_with($url ?? '', 'http') ? 'target="_blank" rel="noopener noreferrer"' : '';
+    $activeNav = match (true) {
+        request()->routeIs('mission-vision') => 'missionVision',
+        request()->routeIs('services') || request()->routeIs('organic-structure') || request()->routeIs('convocatorias') || request()->routeIs('convocatorias.show') => 'services',
+        request()->routeIs('news') => 'news',
+        request()->routeIs('lotaip'), request()->routeIs('accountability'), request()->routeIs('transparency') => 'accountability',
+        request()->routeIs('contact') => 'contact',
+        default => 'home',
+    };
 @endphp
 
 <div id="page-loader" class="page-loader" aria-hidden="true">
@@ -12,10 +20,10 @@
         <img src="/assets/brand/logo.png" alt="Manta Intervención">
     </a>
     <nav class="main-nav" id="main-nav" aria-label="Navegacion principal">
-        <a href="/" data-route>Inicio</a>
-        <a href="/mision-vision" data-route>Misión y Visión</a>
+        <a href="/" data-route @class(['active' => $activeNav === 'home'])>Inicio</a>
+        <a href="/mision-vision" data-route @class(['active' => $activeNav === 'missionVision'])>Misión y Visión</a>
         <div class="nav-dropdown">
-            <button type="button" class="nav-dropdown-trigger active">Servicios</button>
+            <button type="button" @class(['nav-dropdown-trigger', 'active' => $activeNav === 'services'])>Servicios</button>
             <div class="nav-dropdown-menu nav-dropdown-menu-wide">
                 <a href="/servicios" data-route>Todos los servicios</a>
                 <a href="/estructura-organica" data-route>Estructura Orgánica</a>
@@ -25,15 +33,15 @@
                 @endforeach
             </div>
         </div>
-        <a href="/noticias" data-route>Noticias</a>
+        <a href="/noticias" data-route @class(['active' => $activeNav === 'news'])>Noticias</a>
         <div class="nav-dropdown">
-            <button type="button" class="nav-dropdown-trigger">Transparencia</button>
+            <button type="button" @class(['nav-dropdown-trigger', 'active' => $activeNav === 'accountability'])>Transparencia</button>
             <div class="nav-dropdown-menu">
                 <a href="/transparencia/lotaip" data-route>LOTAIP</a>
                 <a href="/transparencia/rendicion-de-cuentas" data-route>Rendición de Cuentas</a>
             </div>
         </div>
-        <a href="/contacto" data-route>Contacto</a>
+        <a href="/contacto" data-route @class(['active' => $activeNav === 'contact'])>Contacto</a>
     </nav>
     <div class="header-actions">
         <a class="online-btn" href="/servicios" data-route>Trámites en línea <span>→</span></a>

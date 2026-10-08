@@ -43,6 +43,7 @@ class PublicContentController extends Controller
 
         return view('public.content-show', [
             'item' => $cmsItem,
+            'quickLinks' => $this->quickLinks(),
         ]);
     }
 
