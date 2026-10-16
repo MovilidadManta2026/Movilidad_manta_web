@@ -22,7 +22,7 @@
 
         <div class="grid gap-4">
             @foreach ($users as $user)
-                <form class="manta-card grid gap-4 p-5 md:grid-cols-[1fr_1fr_190px_140px_auto]" method="POST" action="{{ route('admin.users.update', $user) }}">
+                <form class="manta-card admin-user-form grid gap-4 p-5" method="POST" action="{{ route('admin.users.update', $user) }}">
                     @csrf
                     @method('PUT')
                     <input class="rounded-lg border border-[#aee0f6] px-4 py-3 outline-none focus:border-[#149BD7]" name="name" value="{{ $user->name }}" required>

@@ -8,7 +8,7 @@
             'inicio' => ['area' => 'Página principal', 'help' => 'Héroe, accesos directos y documentos destacados.', 'action' => 'Editar inicio'],
             'mision_vision' => ['area' => 'Institucional', 'help' => 'Misión, visión y principios institucionales visibles en la web.', 'action' => 'Editar misión y visión'],
             'boletines' => ['area' => 'Comunicados', 'help' => 'Carrusel de boletines con popup de comunicado oficial.', 'action' => 'Gestionar boletines'],
-            'convocatorias' => ['area' => 'Procesos públicos', 'help' => 'Convocatorias públicas con detalle y cuatro documentos PDF descargables.', 'action' => 'Gestionar convocatorias'],
+            'convocatorias' => ['area' => 'Procesos públicos', 'help' => 'Convocatorias públicas con detalle y documentos PDF descargables que puedes agregar según necesites.', 'action' => 'Gestionar convocatorias'],
             'popup_convocatorias' => ['area' => 'Avisos temporales', 'help' => 'Popup de convocatoria para portada con imagen y vigencia por fecha y hora.', 'action' => 'Gestionar popup'],
             'textos' => ['area' => 'Textos globales', 'help' => 'Mensajes reutilizables y bloques generales.', 'action' => 'Editar textos'],
             'noticias' => ['area' => 'Noticias', 'help' => 'Publicaciones con imagen, fecha, categoría y detalle.', 'action' => 'Gestionar noticias'],

@@ -15,7 +15,7 @@
             'inicio' => 'Edita el héroe, accesos directos y documentos destacados que aparecen en la página principal.',
             'mision_vision' => 'Edita los bloques públicos de misión, visión y principios institucionales.',
             'boletines' => 'Crea comunicados para el carrusel de boletines de la página principal.',
-            'convocatorias' => 'Publica convocatorias públicas con detalle completo y hasta cuatro PDFs descargables.',
+            'convocatorias' => 'Publica convocatorias públicas con detalle completo y los documentos PDF descargables que necesites.',
             'popup_convocatorias' => 'Configura el popup temporal de convocatoria que aparece solo en la página principal.',
             'textos' => 'Centraliza textos generales, mensajes institucionales y bloques reutilizables.',
             'noticias' => 'Publica noticias con imagen, categoría, fecha visible y detalle de lectura.',

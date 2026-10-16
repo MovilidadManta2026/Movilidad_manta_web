@@ -249,8 +249,7 @@ class CmsItemController extends Controller
         $documents = $metadata['documents'] ?? [];
         $documents = is_array($documents) ? $documents : [];
 
-        foreach (range(0, 3) as $index) {
-            $document = $documents[$index] ?? [];
+        foreach ($documents as $index => $document) {
 
             if ($request->hasFile("convocatoria_documents.$index")) {
                 $file = $request->file("convocatoria_documents.$index");
@@ -276,7 +275,9 @@ class CmsItemController extends Controller
             $documents[$index] = $document;
         }
 
-        $metadata['documents'] = array_values($documents);
+        $metadata['documents'] = array_values(array_filter($documents, fn ($document) =>
+            filled($document['title']) || filled($document['subtitle']) || filled($document['path'] ?? null)
+        ));
 
         return $metadata;
     }

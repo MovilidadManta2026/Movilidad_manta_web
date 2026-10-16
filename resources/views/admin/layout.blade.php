@@ -6,7 +6,7 @@
     <title>@yield('title', 'Panel') | Manta Intervención</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#eef9fd] text-slate-900">
+<body class="admin-shell bg-[#eef9fd] text-slate-900">
     <div class="min-h-screen lg:grid lg:grid-cols-[300px_minmax(0,1fr)]">
         <aside class="border-r border-[#cfeafa] bg-white p-5 shadow-sm lg:min-h-screen">
             <div class="flex items-center justify-between lg:block">
@@ -14,8 +14,9 @@
                     <img class="h-auto w-44" src="/assets/brand/logo.png" alt="Manta Intervención">
                 </a>
                 <a class="rounded-lg border border-[#aee0f6] px-3 py-2 text-sm font-bold text-[#064782] lg:hidden" href="{{ route('home') }}">Web</a>
+                <button type="button" class="manta-action-outline lg:hidden" data-admin-menu-toggle aria-expanded="false" aria-controls="admin-navigation">Menú</button>
             </div>
-
+            <div id="admin-navigation" class="admin-navigation">
             <div class="mt-6 rounded-lg border border-[#cfeafa] bg-[#eef9fd] p-4 text-sm">
                 <span class="text-xs font-black uppercase text-[#149BD7]">Sesión activa</span>
                 <strong class="block text-[#064782]">{{ auth()->user()->name }}</strong>
@@ -46,6 +47,7 @@
                 @csrf
                 <button class="w-full rounded-lg border border-[#aee0f6] px-4 py-3 text-sm font-black uppercase text-[#064782] hover:bg-[#eef9fd]" type="submit">Cerrar sesión</button>
             </form>
+            </div>
         </aside>
 
         <main class="min-w-0 p-4 md:p-8">

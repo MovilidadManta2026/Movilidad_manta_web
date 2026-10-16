@@ -82,53 +82,24 @@
 
 @if ($currentModule === 'convocatorias')
     @php
-        $convocatoriaDocs = $metadata['documents'] ?? [];
-        $defaultDocTitles = [
-            'Bases Concurso Público',
-            'Cronograma y Tarifario',
-            'Requisitos y Formularios',
-            'Acta Concurso Público',
-        ];
+        $convocatoriaDocs = old('metadata.documents', $metadata['documents'] ?? []);
+        $convocatoriaDocs = array_values($convocatoriaDocs ?: [[]]);
     @endphp
-    <section class="grid gap-4 rounded-lg border border-[#cfeafa] bg-white p-4">
+    <section data-convocatoria-documents class="grid gap-4 rounded-lg border border-[#cfeafa] bg-white p-4">
         <div>
             <h3 class="text-sm font-black uppercase text-[#064782]">Documentos de convocatoria</h3>
-            <p class="mt-1 text-xs text-slate-500">Configura los cuatro documentos que aparecerán como botones de descarga en la convocatoria pública.</p>
+            <p class="mt-1 text-xs text-slate-500">Agrega los documentos que necesites, cada uno con título, subtítulo y archivo PDF.</p>
         </div>
 
-        <div class="grid gap-4">
-            @foreach (range(0, 3) as $docIndex)
-                @php
-                    $doc = $convocatoriaDocs[$docIndex] ?? [];
-                    $docPath = $doc['path'] ?? null;
-                    $docUrl = $docPath ? (str_starts_with($docPath, 'http') || str_starts_with($docPath, '/') ? $docPath : '/storage/'.$docPath) : null;
-                @endphp
-                <article class="grid gap-4 rounded-lg border border-[#cfeafa] bg-[#eef9fd] p-4">
-                    <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                        <strong class="text-sm font-black uppercase text-[#064782]">Documento {{ $docIndex + 1 }}</strong>
-                        @if ($docUrl)
-                            <a class="manta-action-outline px-4 py-2 text-xs" href="{{ $docUrl }}" target="_blank" rel="noopener">Ver PDF actual</a>
-                        @endif
-                    </div>
-                    <input type="hidden" name="metadata[documents][{{ $docIndex }}][path]" value="{{ $docPath }}">
-                    <div class="grid gap-4 md:grid-cols-2">
-                        <label class="grid gap-2 text-sm font-bold text-slate-700">
-                            Título del documento
-                            <input class="{{ $inputClass }}" name="metadata[documents][{{ $docIndex }}][title]" value="{{ $doc['title'] ?? $defaultDocTitles[$docIndex] }}" placeholder="Ej: Bases Concurso Público Grúas 2026">
-                        </label>
-                        <label class="grid gap-2 text-sm font-bold text-slate-700">
-                            Subtítulo del documento
-                            <input class="{{ $inputClass }}" name="metadata[documents][{{ $docIndex }}][subtitle]" value="{{ $doc['subtitle'] ?? '' }}" placeholder="Ej: Documento base del concurso público">
-                        </label>
-                    </div>
-                    <label class="grid gap-2 text-sm font-bold text-slate-700">
-                        PDF del documento
-                        <input class="rounded-lg border border-dashed border-[#149BD7] bg-white px-4 py-4 text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-[#064782] file:px-4 file:py-2 file:text-sm file:font-black file:uppercase file:text-white hover:file:bg-[#149BD7]" name="convocatoria_documents[{{ $docIndex }}]" type="file" accept=".pdf">
-                        <span class="text-xs font-medium text-slate-500">Sube un PDF para reemplazar el documento actual.</span>
-                    </label>
-                </article>
+        <div data-document-list class="grid gap-4">
+            @foreach ($convocatoriaDocs as $docIndex => $doc)
+                @include('admin.content.partials.convocatoria-document')
             @endforeach
         </div>
+        <template data-document-template>
+            @include('admin.content.partials.convocatoria-document', ['docIndex' => '__INDEX__', 'doc' => []])
+        </template>
+        <button type="button" data-add-document class="manta-action-outline justify-self-start px-4 py-2 text-sm">+ Agregar documento</button>
     </section>
 @endif
 

@@ -1,6 +1,13 @@
 import './bootstrap';
 import 'flowbite';
 
+document.querySelector('[data-admin-menu-toggle]')?.addEventListener('click', (event) => {
+    const button = event.currentTarget;
+    const expanded = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(expanded));
+    document.querySelector('#admin-navigation')?.classList.toggle('is-open', expanded);
+});
+
 const pages = {
     '/': 'home',
     '/la-ciudad': 'city',
@@ -305,4 +312,37 @@ window.addEventListener('load', () => {
             openAnnouncementModal(document.querySelector('#announcement-modal'));
         }
     }, 650);
+});
+
+// Keep document fields and uploads paired while adding or removing rows.
+document.querySelectorAll('[data-convocatoria-documents]').forEach((section) => {
+    const list = section.querySelector('[data-document-list]');
+    const template = section.querySelector('[data-document-template]');
+
+    const updateRows = () => {
+        const rows = list.querySelectorAll('[data-convocatoria-document]');
+        rows.forEach((row, index) => {
+            row.querySelector('[data-document-label]').textContent = `Documento ${index + 1}`;
+            row.querySelector('[data-remove-document]').hidden = rows.length === 1;
+            row.querySelectorAll('[name]').forEach((input) => {
+                input.name = input.name.replace(/^(metadata\[documents\]|convocatoria_documents)\[[^\]]+\]/, `$1[${index}]`);
+            });
+        });
+    };
+
+    section.querySelector('[data-add-document]').addEventListener('click', () => {
+        const row = template.content.cloneNode(true);
+        list.appendChild(row);
+        updateRows();
+        list.lastElementChild.querySelector('input:not([type="hidden"])').focus();
+    });
+
+    list.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-remove-document]');
+        if (!button || list.children.length <= 1) return;
+        button.closest('[data-convocatoria-document]').remove();
+        updateRows();
+    });
+
+    updateRows();
 });
